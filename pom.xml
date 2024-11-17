@@ -25,7 +25,7 @@
   <modules>
     <!-- <module>api</module> -->
     <!-- <module>avro</module> -->
-    <!-- <module>domain</module> -->
+    <module>common</module>
     <module>processor</module>
     <module>crawler</module>
   </modules>

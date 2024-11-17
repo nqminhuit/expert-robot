@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  # annotations:
+  #   bind-mount-options:/opt/compose/cm8.storage-location: Z
+  # labels:
+  #   app: art
+  name: art
+spec:
+  restartPolicy: Never
+  containers:
+
+  - name: mq
+    image: docker.io/rabbitmq:4.0.3-alpine
+    ports:
+    - containerPort: 5672
+      hostPort: 5672
+
+  - name: crawler
+    image: crawler:latest
+    # envFrom:
+    # - configMapRef:
+    #     name: scheduler-onp-config
+    ports:
+    - containerPort: 5005
+      hostPort: 5005
+
+  - name: processor
+    image: processor:latest
+    ports:
+    - containerPort: 5006
+      hostPort: 5006
+
+  # volumes:
+  # - name: pv-storage-location-onp
+  #   hostPath:
+  #     path: /opt/ocm/compose/cm8.storage-location
+  #     type: Directory
+  # - name: pv-mongodb-onp
+  #   hostPath:
+  #     path: /opt/ocm/compose/cmonp-pod.mongo-data/db-onprem
+  #     type: Directory
+  # - name: pv-nginx
+  #   hostPath:
+  #     path: /opt/ocm/nginx-cmonp
+  #     type: Directory

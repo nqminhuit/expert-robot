@@ -21,12 +21,12 @@ spec:
           value: dev
         - name: POSTGRES_DB
           value: art
-      # ports:
-      #   - containerPort: 5432
-      #     hostPort: 5432
-      # volumeMounts:
-      #   - mountPath: /var/lib/postgresql/data
-      #     name: pv-db
+      ports:
+        - containerPort: 5432
+          hostPort: 5432
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pv-db
       # readinessProbe:
       #   exec:
       #     command:

@@ -16,6 +16,7 @@ public class NypostSiteMap extends PanacheEntityBase {
     public int year;
     public int month;
     public String url;
+    public boolean crawled;
 
     public static void persist(NypostSiteMapDto nypostSiteMapDto) {
         nypostSiteMapDto.months().stream()
@@ -27,5 +28,10 @@ public class NypostSiteMap extends PanacheEntityBase {
                     return entity;
                 })
                 .forEach(e -> e.persist());
+    }
+
+    @Override
+    public String toString() {
+        return "id=%s year=%d month=%d url=%s crawled=%b".formatted(id, year, month, url, crawled);
     }
 }

@@ -1,37 +1,57 @@
 package org.nqm.er.common.entity;
 
-import java.util.UUID;
 import org.nqm.er.common.dto.NypostSiteMapDto;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 
 @Entity(name = "nypost_sitemap")
 public class NypostSiteMap extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue
-    public UUID id;
-    public int year;
-    public int month;
-    public String url;
+    @EmbeddedId
+    public NypostSiteMapId pk;
+
     public boolean crawled;
 
     public static void persist(NypostSiteMapDto nypostSiteMapDto) {
         nypostSiteMapDto.months().stream()
                 .map(dto -> {
                     var entity = new NypostSiteMap();
-                    entity.year = nypostSiteMapDto.year();
-                    entity.month = dto.month();
-                    entity.url = dto.url();
+                    entity.setYear(nypostSiteMapDto.year());
+                    entity.setMonth(dto.month());
+                    entity.setUrl(dto.url());
                     return entity;
+                })
+                .filter(entity -> {
+                    return findById(entity.pk) == null;
                 })
                 .forEach(e -> e.persist());
     }
 
+    public void setYear(int year) {
+        if (this.pk == null) {
+            this.pk = new NypostSiteMapId();
+        }
+        this.pk.year = year;
+    }
+
+    public void setMonth(int month) {
+        if (this.pk == null) {
+            this.pk = new NypostSiteMapId();
+        }
+        this.pk.month = month;
+    }
+
+    public void setUrl(String url) {
+        if (this.pk == null) {
+            this.pk = new NypostSiteMapId();
+        }
+        this.pk.url = url;
+    }
+
     @Override
     public String toString() {
-        return "id=%s year=%d month=%d url=%s crawled=%b".formatted(id, year, month, url, crawled);
+        return "year=%d month=%d url=%s crawled=%b"
+                .formatted(pk.year, pk.month, pk.url, crawled);
     }
 }

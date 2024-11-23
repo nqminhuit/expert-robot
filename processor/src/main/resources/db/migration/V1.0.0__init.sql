@@ -1,8 +1,8 @@
 CREATE TABLE nypost_sitemap (
-       id UUID PRIMARY KEY,
        year INT NOT NULL,
        month INT NOT NULL,
-       url VARCHAR(255) NOT NULL
+       url VARCHAR(255) NOT NULL,
+       PRIMARY KEY(year, month, url)
 );
 
 -- INSERT INTO nypost_sitemap (id, year, month, url) values

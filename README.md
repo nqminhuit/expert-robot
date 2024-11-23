@@ -22,9 +22,12 @@ podman exec -it art-db psql -U dev art
 \c
 
 select distinct year from nypost_sitemap order by year;
+
+select count(1) from nypost_sitemap ;
 ```
 
 develop on a container:
 ```bash
 n=crawler; cd $n; mvn package; podman build -t $n .; podman run --replace --pod art --name art-$n $n;
+n=processor; cd $n; mvn package; podman build -t $n .; podman run --replace --pod art --name art-$n $n;
 ```

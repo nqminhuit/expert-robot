@@ -3,7 +3,7 @@ package org.nqm.er.crawler;
 import java.util.List;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.nqm.er.common.NypostSiteMap;
+import org.nqm.er.common.dto.NypostSiteMapDto;
 import org.nqm.er.common.constant.MessageConstant;
 import org.nqm.er.crawler.service.NypostService;
 import io.quarkus.logging.Log;
@@ -15,7 +15,7 @@ import jakarta.inject.Inject;
 public class ArtProducer {
 
     @Channel(MessageConstant.CHANNEL_SITEMAP)
-    Emitter<NypostSiteMap> artEmitter;
+    Emitter<NypostSiteMapDto> artEmitter;
 
     @Inject
     NypostService nypostService;

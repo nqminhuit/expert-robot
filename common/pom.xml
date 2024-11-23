@@ -19,6 +19,14 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.17.0</version>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

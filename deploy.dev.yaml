@@ -1,46 +1,50 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  # annotations:
-  #   bind-mount-options:/opt/compose/cm8.storage-location: Z
-  # labels:
-  #   app: art
+  annotations:
+    bind-mount-options:/opt/art/db: Z
   name: art
 spec:
-  restartPolicy: Never
+  restartPolicy: OnFailure
   containers:
-
-  - name: mq
-    image: docker.io/rabbitmq:4.0.3-alpine
-    ports:
-    - containerPort: 5672
-      hostPort: 5672
-
-  - name: crawler
-    image: crawler:latest
-    # envFrom:
-    # - configMapRef:
-    #     name: scheduler-onp-config
-    ports:
-    - containerPort: 5005
-      hostPort: 5005
-
-  - name: processor
-    image: processor:latest
-    ports:
-    - containerPort: 5006
-      hostPort: 5006
-
-  # volumes:
-  # - name: pv-storage-location-onp
-  #   hostPath:
-  #     path: /opt/ocm/compose/cm8.storage-location
-  #     type: Directory
-  # - name: pv-mongodb-onp
-  #   hostPath:
-  #     path: /opt/ocm/compose/cmonp-pod.mongo-data/db-onprem
-  #     type: Directory
-  # - name: pv-nginx
-  #   hostPath:
-  #     path: /opt/ocm/nginx-cmonp
-  #     type: Directory
+    - name: mq
+      image: docker.io/rabbitmq:4.0.3-alpine
+      ports:
+        - containerPort: 5672
+          hostPort: 5672
+    - name: db
+      image: docker.io/postgres:17.1-alpine3.20
+      env:
+        - name: POSTGRES_PASSWORD
+          value: dev
+        - name: POSTGRES_USER
+          value: dev
+        - name: POSTGRES_DB
+          value: art
+      # ports:
+      #   - containerPort: 5432
+      #     hostPort: 5432
+      # volumeMounts:
+      #   - mountPath: /var/lib/postgresql/data
+      #     name: pv-db
+      # readinessProbe:
+      #   exec:
+      #     command:
+      #       - /bin/sh
+      #       - -c
+      #       - exec pg_isready -U dev -h 127.0.0.1 -p 5432
+    - name: crawler
+      image: crawler:latest
+      ports:
+        - containerPort: 5005
+          hostPort: 5005
+    - name: processor
+      image: processor:latest
+      ports:
+        - containerPort: 5006
+          hostPort: 5006
+  volumes:
+    - name: pv-db
+      hostPath:
+        path: /opt/art/db
+        type: Directory
